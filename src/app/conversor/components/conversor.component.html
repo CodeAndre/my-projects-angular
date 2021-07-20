@@ -1,0 +1,65 @@
+<br>
+
+<div class="alert alert-danger"
+    role="alert"
+    *ngIf = "possuiErro"> <!--Se obter algum erro, vai mostrar essa mensagem-->
+    Erro obtendo dados. Tente novamente
+</div>
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        Selecione a moeda a ser convertida
+    </div>
+
+    <div class="panel-body text-center">
+        <form class="form-inline" #conversaoForm="ngForm">
+            <input 
+                type="text" 
+                name="valor" 
+                class="form-control text-right formulario"
+                placeholder="0"
+                [(ngModel)]="conversao.valor"
+                numero
+                required />
+
+            <select 
+                name="moedaDe" 
+                class="form-control"
+                [(ngModel)]="conversao.moedaDe"
+                required>
+                <option 
+                    *ngFor="let moeda of moedas"
+                    [value]="moeda.sigla">
+                    {{moeda.sigla}} - {{moeda.descricao}} <!--Vai ter a sigla e a descrição da moeda lá no params-->
+                </option>
+            </select>
+            <span class="glyphicon glyphicon-arrow-right seta"
+                aria-hidden="true">
+            </span>
+            <select 
+                name="moedaPara" 
+                class="form-control"
+                [(ngModel)]="conversao.moedaPara"
+                required>
+                <option *ngFor="let moeda of moedas"
+                [value]="moeda.sigla">
+                {{moeda.sigla}} - {{moeda.descricao}}
+                </option>
+            </select>
+            <input 
+                type="submit"
+                value="Converter"
+                class="btn btn-success botao"
+                data-toggle="modal"
+                data-target="#modalCotacao"
+                (click)="converter()"
+                [disabled]="!conversaoForm.form.valid"> <!--[]-> operador de atribuição que irá se conectar com o componente, e só estará habilitado quando o form for valido-->
+        </form>
+    </div>
+    <modal-cotacao
+        [id]="'modalCotacao'"
+        [conversaoResponse] = "conversaoResponse"
+        [conversao] = "conversao"
+        (onConfirm) = "init()">
+    </modal-cotacao>
+</div>
